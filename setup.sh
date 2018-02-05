@@ -4,6 +4,8 @@
 #readonly DEBIAN=2
 #readonly UBUNTU=3
 
+DOTFILES=$(cd "$(dirname "$0")"; pwd)
+
 function getOperatingSystemName() {
     local osName=$(hostnamectl | grep "Operating System" | awk '{print $3}')
     echo ${osName}
@@ -26,10 +28,22 @@ function isUbuntu() {
     [[ "$operatingSystemName" == "Ubuntu" ]] && return 0 || return 1
 }
 
+function installOhMyZsh() {
+	rm -rf ~/.oh-my-zsh
+	sh -c "$(wget https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh -O -)"
+}
+
+function zsh() {
+	ln -sf "$DOTFILES/zsh/.zshrc" ~/.zshrc
+}
+
 function main() {
-    operatingSystemName=$(getOperatingSystemName)
-    operatingSystemVersion=$(getOperatingSystemVersion)
-    echo "current operating system = $operatingSystemName $operatingSystemVersion"
+#    operatingSystemName=$(getOperatingSystemName)
+#    operatingSystemVersion=$(getOperatingSystemVersion)
+#    echo "current operating system = $operatingSystemName $operatingSystemVersion"
+
+	installOhMyZsh
+	zsh
 
 #    if isFedora; then
 #        echo "Fedora"
