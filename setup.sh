@@ -1,70 +1,161 @@
 #!/usr/bin/env bash
 
-show_help() {
-    package=`basename "$0"`
+PACKAGE=`basename "$0"`
+DOTFILES=$(cd "$(dirname "$0")"; pwd)
 
-    echo "$package - setup *nix environment"
+TARGET_SYSTEM=
+TARGET_SYSTEM_VERSION=
+
+declare -A SETUP_MODULES
+SETUP_MODULES["base"]=false
+SETUP_MODULES["dropbox"]=false
+SETUP_MODULES["environment"]=false
+SETUP_MODULES["gnome3"]=false
+SETUP_MODULES["gnome3_extensions"]=false
+SETUP_MODULES["zsh"]=false
+
+declare -a SETUP_MODULES_ORDER;
+for module in "${!SETUP_MODULES[@]}" ; do
+    SETUP_MODULES_ORDER+=(${module})
+done
+
+SETUP_MODULES_ORDER=($(
+    for module in ${SETUP_MODULES_ORDER[@]}; do
+        echo $module;
+    done | sort
+))
+
+header() {
     echo " "
-    echo "usage: $package --system=<fedora|ubuntu|synology> [<modules>...]"
+    echo "$PACKAGE - setup *nix environment"
+    echo "bash version = $BASH_VERSION"
+    echo " "
+}
+
+usage() {
+    echo "usage: $PACKAGE --system=<fedora|ubuntu|synology> --all|<modules>..."
     echo " "
     echo "supported modules:"
-    echo " --base"
-    echo " --environment"
-    echo " --gnome3"
-    echo " --gnome3-extensions"
-    echo " --zsh"
+
+    for module in "${!SETUP_MODULES[@]}" ; do
+        echo " --${module}"
+    done | sort
     exit 0;
 }
 
-
-#readonly FEDORA=1
-#readonly DEBIAN=2
-#readonly UBUNTU=3
-
-DOTFILES=$(cd "$(dirname "$0")"; pwd)
-
-function getOperatingSystemName() {
-	echo $(checkFedora)
-}
-
-function getOperatingSystemVersion() {
-	if isFedora; then
-		echo $(getFedoraVersion)
-	fi
-	if isDebian; then
-		echo $(getDebianVersion)
-	fi
-	if isUbuntu; then
-		echo $(getUbuntuVersion)
-	fi
-}
-
-function checkFedora() {
-	[[ -f /etc/fedora-release ]] && cat /etc/fedora-release | awk '{print $1}';
+# OS related functions
+function isFedora() {
+    [[ "$TARGET_SYSTEM" == "fedora" ]] && return 0 || return 1
 }
 
 function getFedoraVersion() {
 	[[ -f /etc/fedora-release ]] && cat /etc/fedora-release | awk '{print $3}'
 }
 
-function isFedora() {
-    [[ "$operatingSystemName" == "Fedora" ]] && return 0 || return 1
-}
-
-function isDebian() {
-    [[ "$operatingSystemName" == "Debian" ]] && return 0 || return 1
-}
-
 function isUbuntu() {
-    [[ "$operatingSystemName" == "Ubuntu" ]] && return 0 || return 1
+    [[ "$TARGET_SYSTEM" == "ubuntu" ]] && return 0 || return 1
 }
+
+function getUbuntuVersion() {
+    $(lsb_release -sr)
+}
+
+function isSynology() {
+    [[ "$TARGET_SYSTEM" == "synology" ]] && return 0 || return 1
+}
+
+function getSynologyVersion() {
+    echo 1
+}
+
+function getOperatingSystemVersion() {
+	if isFedora; then
+		echo $(getFedoraVersion)
+	fi
+	if isUbuntu; then
+		echo $(getUbuntuVersion)
+	fi
+	if isSynology; then
+		echo $(getSynologyVersion)
+	fi
+}
+
+function run_module_if_enabled() {
+    local module=$1
+    local enabled="${SETUP_MODULES[$module]}"
+
+    printf " --%-20s = %s\n" ${module} ${enabled}
+
+    if $enabled; then
+        local function_name="setup_$module"
+#        $function_name
+    fi
+}
+
+# main
+header
+if [ $# -eq 0 ]; then
+    usage
+fi
+
+# arguments processing
+for argument in "$@"
+do
+    case ${argument} in
+
+        --system=*)
+            TARGET_SYSTEM="${argument#*=}"
+            TARGET_SYSTEM_VERSION=$(getOperatingSystemVersion)
+        ;;
+
+        --all)
+            for module in "${!SETUP_MODULES[@]}" ; do
+                SETUP_MODULES[$module]=true
+            done
+        ;;
+
+        --*)
+            module=${argument#--}
+            if [ ${SETUP_MODULES[$module]+exists} ] ; then
+                SETUP_MODULES[$module]=true
+            else
+                >&2 echo "unknown module $module"
+                exit 1
+            fi
+        ;;
+
+        *)
+            >&2 echo unknown option ${argument}
+            exit 1
+        ;;
+    esac
+done
+
+
+if [ -z "$TARGET_SYSTEM" ]; then
+    >&2 echo target system was not provided
+    exit 1
+fi
+if [ -z "$TARGET_SYSTEM_VERSION" ]; then
+    >&2 echo target system version could not be detected
+    exit 1
+fi
+
+echo "target operating system = $TARGET_SYSTEM $TARGET_SYSTEM_VERSION"
+
+for module in "${SETUP_MODULES_ORDER[@]}" ; do
+    run_module_if_enabled $module
+done
+
+exit 0
+
 
 function base() {
     if isFedora; then
         sudo dnf -y install https://download1.rpmfusion.org/free/fedora/rpmfusion-free-release-$(rpm -E %fedora).noarch.rpm https://download1.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-$(rpm -E %fedora).noarch.rpm
         sudo dnf -y update
-        sudo dnf -y install vim mc lftp zsh git svn screenfetch gpg util-linux-user sqlite gcc make cmake htop wget glibc
-        sudo dnf -y install kernel-devel kernel-headers ncurses-compat-libs elfutils-libelf-devel
+        sudo dnf -y install vim mc lftp zsh git svn screenfetch gpg util-linux-user sqlite gcc make cmake htop wget glibc \
+            kernel-devel kernel-headers ncurses-compat-libs elfutils-libelf-devel
     fi
 }
 
@@ -114,7 +205,8 @@ function gnome3() {
             flameshot \
             hunspell-ru hunspell-de \
             goldendict mplayer \
-            encfs
+            encfs \
+            arandr gnome-python2-gconf
 
         sudo dnf -y install http://linuxdownload.adobe.com/adobe-release/adobe-release-x86_64-1.0-1.noarch.rpm
         sudo rpm --import /etc/pki/rpm-gpg/RPM-GPG-KEY-adobe-linux
@@ -171,19 +263,3 @@ function zsh() {
 	ln -sf "$DOTFILES/zsh/.zshrc" ~/.zshrc
 }
 
-function main() {
-    if [ $# -eq 0 ]; then
-        show_help
-    fi
-
-	operatingSystemName=$(getOperatingSystemName)
-	operatingSystemVersion=$(getOperatingSystemVersion)
-	echo "current operating system = $operatingSystemName $operatingSystemVersion"
-
-#	installOhMyZsh
-#	zsh
-
-}
-
-
-main
