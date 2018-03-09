@@ -1,5 +1,9 @@
 #!/usr/bin/env bash
 
+RED='\033[1;31m'
+YELLOW='\033[1;33m'
+NC='\033[0m'
+
 PACKAGE=`basename "$0"`
 DOTFILES=$(cd "$(dirname "$0")"; pwd)
 
@@ -12,6 +16,7 @@ SETUP_MODULES["dropbox"]=false
 SETUP_MODULES["environment"]=false
 SETUP_MODULES["gnome3"]=false
 SETUP_MODULES["gnome3_extensions"]=false
+SETUP_MODULES["gnome3_keyboard_shortcuts"]=false
 SETUP_MODULES["zsh"]=false
 
 declare -a SETUP_MODULES_ORDER;
@@ -80,15 +85,34 @@ function getOperatingSystemVersion() {
 	fi
 }
 
+function print_module_status() {
+    local module=$1
+    local enabled="${SETUP_MODULES[$module]}"
+
+    printf " --%-30s = %s\n" ${module} ${enabled}
+}
+
+
 function run_module_if_enabled() {
     local module=$1
     local enabled="${SETUP_MODULES[$module]}"
 
-    printf " --%-20s = %s\n" ${module} ${enabled}
-
     if $enabled; then
-        local function_name="setup_$module"
-#        $function_name
+        echo
+        echo -e "$YELLOW processing module $module... $NC"
+
+        if [ -f ${module}/${TARGET_SYSTEM}_${TARGET_SYSTEM_VERSION}_${module}.sh ]; then
+            echo "loading "${module}/${TARGET_SYSTEM}_${TARGET_SYSTEM_VERSION}_${module}.sh
+            ${module}/${TARGET_SYSTEM}_${TARGET_SYSTEM_VERSION}_${module}.sh
+        elif [ -f ${module}/${TARGET_SYSTEM}_${module}.sh ]; then
+            echo "loading "${module}/${TARGET_SYSTEM}_${module}.sh
+            ${module}/${TARGET_SYSTEM}_${module}.sh
+        elif [ -f ${module}/${module}.sh ]; then
+            echo "loading "${module}/${module}.sh
+            ${module}/${module}.sh
+        else
+            echo -e "$RED it'not possible to load $module $NC"
+        fi
     fi
 }
 
@@ -119,13 +143,13 @@ do
             if [ ${SETUP_MODULES[$module]+exists} ] ; then
                 SETUP_MODULES[$module]=true
             else
-                >&2 echo "unknown module $module"
+                echo -e "$RED unknown module $module $NC"
                 exit 1
             fi
         ;;
 
         *)
-            >&2 echo unknown option ${argument}
+            echo -e "$RED unknown option $argument $NC"
             exit 1
         ;;
     esac
@@ -133,19 +157,35 @@ done
 
 
 if [ -z "$TARGET_SYSTEM" ]; then
-    >&2 echo target system was not provided
+    echo -e "$RED target system was not provided $NC"
     exit 1
 fi
 if [ -z "$TARGET_SYSTEM_VERSION" ]; then
-    >&2 echo target system version could not be detected
+    echo -e "$RED target system version could not be detected $NC"
     exit 1
 fi
 
 echo "target operating system = $TARGET_SYSTEM $TARGET_SYSTEM_VERSION"
 
 for module in "${SETUP_MODULES_ORDER[@]}" ; do
-    run_module_if_enabled $module
+    print_module_status $module
 done
+
+REPLY="wait for answer"
+while [[ ! $REPLY =~ ^[Yy]$ && ! $REPLY =~ ^[Nn]$ && ! -z "$REPLY" ]]; do
+    read -n 1 -r -p $'continue processing [y/N]: '
+    echo
+done
+
+if [[ $REPLY =~ ^[Yy]$ ]] ; then
+    pushd $DOTFILES > /dev/null
+
+    for module in "${SETUP_MODULES_ORDER[@]}" ; do
+        run_module_if_enabled $module
+    done
+
+    popd > /dev/null
+fi
 
 exit 0
 
@@ -206,7 +246,8 @@ function gnome3() {
             hunspell-ru hunspell-de \
             goldendict mplayer \
             encfs \
-            arandr gnome-python2-gconf
+            arandr gnome-python2-gconf \
+            pulseaudio-equalizer
 
         sudo dnf -y install http://linuxdownload.adobe.com/adobe-release/adobe-release-x86_64-1.0-1.noarch.rpm
         sudo rpm --import /etc/pki/rpm-gpg/RPM-GPG-KEY-adobe-linux
@@ -221,13 +262,13 @@ function gnome3() {
     gsettings set org.gnome.evolution.mail composer-no-signature-delim true
 }
 
-function gnome3-extensions() {
+function gnome3_extensions() {
     if isFedora; then
         sudo dnf -y install \
             gnome-tweak-tool \
             gnome-shell-extension-auto-move-windows \
             gnome-shell-extension-common \
-            gnome-shell-extension-dash-to-dock \
+#            gnome-shell-extension-dash-to-dock \
             gnome-shell-extension-disconnect-wifi \
             gnome-shell-extension-drive-menu \
             gnome-shell-extension-gpaste \
@@ -241,6 +282,8 @@ function gnome3-extensions() {
             gnome-shell-extension-window-list
     fi
 }
+
+
 
 function java8() {
     if isFedora; then
