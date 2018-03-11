@@ -11,18 +11,11 @@ TARGET_SYSTEM=
 TARGET_SYSTEM_VERSION=
 
 declare -A SETUP_MODULES
-SETUP_MODULES["base"]=false
-SETUP_MODULES["dropbox"]=false
-SETUP_MODULES["environment"]=false
-SETUP_MODULES["gnome3"]=false
-SETUP_MODULES["gnome3_extensions"]=false
-SETUP_MODULES["gnome3_keyboard_shortcuts"]=false
-SETUP_MODULES["zsh"]=false
 
-declare -a SETUP_MODULES_ORDER;
-for module in "${!SETUP_MODULES[@]}" ; do
-    SETUP_MODULES_ORDER+=(${module})
-done
+SETUP_MODULES_ORDER=()
+while IFS= read -d $'\0' -r file ; do
+    SETUP_MODULES_ORDER=("${SETUP_MODULES_ORDER[@]}" "$file")
+done < <(find . -maxdepth 1 -mindepth 1 -type d ! -name '.git' -exec basename -z {} \;)
 
 SETUP_MODULES_ORDER=($(
     for module in ${SETUP_MODULES_ORDER[@]}; do
@@ -30,21 +23,27 @@ SETUP_MODULES_ORDER=($(
     done | sort
 ))
 
+for module in "${SETUP_MODULES_ORDER[@]}" ; do
+    SETUP_MODULES[$module]=false
+done
+
 header() {
-    echo " "
+    echo
     echo "$PACKAGE - setup *nix environment"
     echo "bash version = $BASH_VERSION"
-    echo " "
+    echo
 }
 
 usage() {
     echo "usage: $PACKAGE --system=<fedora|ubuntu|synology> --all|<modules>..."
-    echo " "
+    echo
     echo "supported modules:"
 
     for module in "${!SETUP_MODULES[@]}" ; do
         echo " --${module}"
     done | sort
+
+    echo
     exit 0;
 }
 
@@ -62,7 +61,7 @@ function isUbuntu() {
 }
 
 function getUbuntuVersion() {
-    $(lsb_release -sr)
+    echo $(lsb_release -sr)
 }
 
 function isSynology() {
@@ -166,10 +165,11 @@ if [ -z "$TARGET_SYSTEM_VERSION" ]; then
 fi
 
 echo "target operating system = $TARGET_SYSTEM $TARGET_SYSTEM_VERSION"
-
+echo
 for module in "${SETUP_MODULES_ORDER[@]}" ; do
     print_module_status $module
 done
+echo
 
 REPLY="wait for answer"
 while [[ ! $REPLY =~ ^[Yy]$ && ! $REPLY =~ ^[Nn]$ && ! -z "$REPLY" ]]; do
