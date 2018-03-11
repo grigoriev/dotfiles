@@ -1,0 +1,258 @@
+# If you come from bash you might have to change your $PATH.
+# export PATH=$HOME/bin:/usr/local/bin:$PATH
+
+# Path to your oh-my-zsh installation.
+export ZSH=/home/grigoriev/.oh-my-zsh
+
+# Set name of the theme to load. Optionally, if you set this to "random"
+# it'll load a random theme each time that oh-my-zsh is loaded.
+# See https://github.com/robbyrussell/oh-my-zsh/wiki/Themes
+ZSH_THEME="agnoster"
+
+# Uncomment the following line to use case-sensitive completion.
+# CASE_SENSITIVE="true"
+
+# Uncomment the following line to use hyphen-insensitive completion. Case
+# sensitive completion must be off. _ and - will be interchangeable.
+HYPHEN_INSENSITIVE="true"
+
+# Uncomment the following line to disable bi-weekly auto-update checks.
+# DISABLE_AUTO_UPDATE="true"
+
+# Uncomment the following line to change how often to auto-update (in days).
+# export UPDATE_ZSH_DAYS=13
+
+# Uncomment the following line to disable colors in ls.
+# DISABLE_LS_COLORS="true"
+
+# Uncomment the following line to disable auto-setting terminal title.
+# DISABLE_AUTO_TITLE="true"
+
+# Uncomment the following line to enable command auto-correction.
+ENABLE_CORRECTION="true"
+
+# Uncomment the following line to display red dots whilst waiting for completion.
+COMPLETION_WAITING_DOTS="true"
+
+# Uncomment the following line if you want to disable marking untracked files
+# under VCS as dirty. This makes repository status check for large repositories
+# much, much faster.
+# DISABLE_UNTRACKED_FILES_DIRTY="true"
+
+# Uncomment the following line if you want to change the command execution time
+# stamp shown in the history command output.
+# The optional three formats: "mm/dd/yyyy"|"dd.mm.yyyy"|"yyyy-mm-dd"
+HIST_STAMPS="dd.mm.yyyy"
+
+# Would you like to use another custom folder than $ZSH/custom?
+# ZSH_CUSTOM=/path/to/new-custom-folder
+
+# Which plugins would you like to load? (plugins can be found in ~/.oh-my-zsh/plugins/*)
+# Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
+# Example format: plugins=(rails git textmate ruby lighthouse)
+# Add wisely, as too many plugins slow down shell startup.
+plugins=(
+    battery
+    brew
+    colored-man-pages
+    colorize
+    command-not-found
+    common-aliases
+    copydir
+    copyfile
+    cp
+    encode64
+    extract
+    history
+    debian
+    dnf
+    docker
+    docker-compose
+    docker-machine
+    firewalld
+    geeknote
+    git
+    git-extras
+    gitfast
+    git-flow
+    git-remote-branch
+    github
+    gitignore
+    git-prompt
+    gpg-agent
+    jira
+    man
+    mvn
+    postgres
+    rsync
+    screen
+    ssh-agent
+    sudo
+    suse
+    svn
+    svn-fast-info
+    systemd
+    terminator
+    vim-interaction
+    web-search
+    zsh-navigation-tools)
+
+source $ZSH/oh-my-zsh.sh
+
+# User configuration
+
+# export MANPATH="/usr/local/man:$MANPATH"
+
+# You may need to manually set your language environment
+# export LANG=en_US.UTF-8
+
+export EDITOR='vim'
+
+# Preferred editor for local and remote sessions
+# if [[ -n $SSH_CONNECTION ]]; then
+#   export EDITOR='vim'
+# else
+#   export EDITOR='mvim'
+# fi
+
+# Compilation flags
+export ARCHFLAGS="-arch x86_64"
+
+# ssh
+export SSH_KEY_PATH="~/.ssh/rsa_id"
+
+# Set personal aliases, overriding those provided by oh-my-zsh libs,
+# plugins, and themes. Aliases can be placed here, though oh-my-zsh
+# users are encouraged to define aliases within the ZSH_CUSTOM folder.
+# For a full list of active aliases, run `alias`.
+#
+# Example aliases
+alias zshconfig="vim ~/.zshrc"
+alias ohmyzsh="vim ~/.oh-my-zsh"
+
+alias lftp-seedbox="lftp ls0835.seedbox.org.ua"
+alias lftp-tuco-tuco-local="lftp 192.168.88.233"
+alias lftp-tuco-tuco-remote="lftp tuco-tuco.grigoriev.eu"
+
+#network
+alias beaver-mount-music="sudo mount -t cifs //beaver.local/music ~/Music/beaver -o user=guest,guest"
+
+# ssh                                                                            
+alias home-ssh-squirrel-intranet="ssh root@192.168.88.1 -p 12594"
+alias home-ssh-squirrel-remote="ssh -t grigoriev@tuco-tuco.grigoriev.eu -p 22954 ssh root@192.168.88.1 -p 12594"
+alias home-ssh-tuco-tuco-remote="ssh grigoriev@tuco-tuco.grigoriev.eu -p 22954"
+alias home-ssh-tuco-tuco-intranet='ssh grigoriev@192.168.88.233'
+
+
+alias sqldeveloper="/opt/sqldeveloper/sqldeveloper.sh"                           
+                                                                                  
+alias select-jdk="sudo update-alternatives --config java"                        
+
+# alias change-viber-ratio="sqlite3 ~/.ViberPC/config.db -interactive 'update CommonSettings set Value = 1.0 where Title = "ScalingRatio"'"
+                                                                                  
+#alias svn-update="find . -maxdepth 5 -mindepth 1 -type d -name .svn -exec svn up {}/.. \;"     
+alias svn-update="find . ! -readable -prune -o -type d -name .svn -exec svn up {}/.. \;"     
+                                                                                  
+#intechcore                                                                      
+alias itc-svn-edit="vim -O scp://grigoriev@helium.local//volume1/svn/authz scp://grigoriev@helium.local//volume1/svn/passwd"
+alias itc-svn-edit-remote="vim -O scp://grigoriev@git.intechcore.de//volume1/svn/authz scp://grigoriev@git.intechcore.de//volume1/svn/passwd"
+
+alias itc-sg-intechcore-de="ssh -XC sg.intechcore.de -p 2295"
+
+alias itc-ssh-alphabet-intechcore-intranet="ssh itc.grigoriev@192.168.1.110"
+
+alias itc-ssh-confluence-intechcore-intranet="ssh intechcore@192.168.1.150"
+alias itc-ssh-hrm-intechcore-intranet="ssh intechcore@192.168.1.151"
+alias itc-ssh-jenkins-jtp-intechcore-intranet="ssh intechcore@192.168.1.175"
+alias itc-ssh-jenkins-ts-intechcore-intranet="ssh intechcore@192.168.1.170"
+alias itc-ssh-jenkins-tsc-intechcore-intranet="ssh intechcore@192.168.1.171"
+alias itc-ssh-jenkins-tsm-intechcore-intranet="ssh intechcore@192.168.1.172"
+alias itc-ssh-jenkins-zs-intechcore-intranet="ssh intechcore@192.168.1.173"
+alias itc-ssh-jira-internal-intechcore-intranet="ssh intechcore@192.168.1.152"
+alias itc-ssh-jira-intechcore-intranet="ssh intechcore@192.168.1.153"
+alias itc-ssh-nexus-intechcore-intranet="ssh intechcore@192.168.1.154"
+alias itc-ssh-sonar-intechcore-intranet="ssh intechcore@192.168.1.174"
+
+alias itc-ssh-tsc-server-intechcore-intranet="ssh intechcore@192.168.1.195"
+alias itc-ssh-websta32-intechcore-intranet="ssh intechcore@192.168.1.192"
+alias itc-ssh-websta33-intechcore-intranet="ssh intechcore@192.168.1.193"
+
+alias itc-ssh-command-on-all-servers-as-root-parallel="parallel-ssh --user root --print --hosts ~/.intechcore-server-hosts -- "
+alias itc-ssh-command-on-all-servers-as-intechcore-parallel="parallel-ssh --user intechcore --print --hosts ~/.intechcore-server-hosts -- "
+
+itc-ssh-command-on-all-servers-as-user() {
+    for server in $(cat ~/.intechcore-server-hosts ) ; do
+        echo ${1}@${server} "${@:2}"
+        ssh ${1}@${server} "${@:2}"
+    done
+}
+ 
+itc-ssh-command-on-all-servers-as-root() {
+    itc-ssh-command-on-all-servers-as-user root ${@}
+}
+
+itc-ssh-command-on-all-servers-as-intechcore() {
+    itc-ssh-command-on-all-servers-as-user intechcore ${@}
+}
+
+# export JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64 
+# export PATH=$HOME/bin:/usr/local/bin:$JAVA_HOME/bin:$PATH    
+export PATH=$HOME/bin:/usr/local/bin:$PATH    
+export PATH="$HOME/.jenv/bin:$PATH"
+eval "$(jenv init -)"
+
+
+export TERM=xterm-256color
+export QT_AUTO_SCREEN_SCALE_FACTOR=0
+
+change-permissions() {
+    local WHERE=$1
+    local TYPE=$2
+    local PERMISSIONS=$3
+
+    find "$WHERE" -type $TYPE -exec chmod $PERMISSIONS {} \;
+}
+
+chmodf() {
+    local WHERE=${1:-.}
+    local PERMISSIONS=${2:-0644}
+
+    change-permissions "$WHERE" f $PERMISSIONS
+}
+
+chmodd() {
+    local WHERE=${1:-.}
+    local PERMISSIONS=${2:-0755}
+
+    change-permissions "$WHERE" d $PERMISSIONS
+}
+
+
+alias ping='ping -c 5'
+
+alias ls='ls --color=auto --group-directories-first'
+alias llm='ls -l --block-size=MB'
+alias llg='ls -l --block-size=GB'
+
+alias df='df -h'
+alias du='du -h --max-depth=1 | sort -h'
+
+alias  a='sudo apt install'
+alias au='sudo apt update && sudo apt upgrade'
+alias ai='apt show'
+alias as='apt search'
+
+alias set-default-file-permissions='find . -type d -exec chmod 0755 {} \; && find . -type f -exec chmod 0644 {} \;'
+alias set-default-file-permissions-with-sudo='sudo find . -type d -exec chmod 0755 {} \; && sudo find . -type f -exec chmod 0644 {} \;'
+
+alias docker-list-container-ips='docker inspect -f "{{.Name}} - {{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}" $(docker ps -aq)'
+alias docker-remove-unchained-volumes='docker volume rm $(docker volume ls -q -f dangling=true)'
+
+alias pretty-git-log='git log --pretty=format:"%C(auto,yellow)%h%C(auto,magenta)% G? %C(auto,blue)%>(19,trunc)%ad %C(auto,green)%<(19,trunc)%aN%C(auto,white)%s%C(auto,red)% gD% D" --graph --date=format:"%Y-%m-%d %H:%M:%S"'
+
+alias weather-munich='curl wttr.in/munich\?1n'
+alias weather-home='curl wttr.in/48.13,11.67\?0'
+alias weather-work='curl wttr.in/48.035,11.588\?0'
+alias weather-minsk='curl wttr.in/minsk\?1n'
+
+
