@@ -1,0 +1,34 @@
+change-permissions() {
+    local WHERE=$1
+    local TYPE=$2
+    local PERMISSIONS=$3
+
+    find "$WHERE" -type $TYPE -exec chmod $PERMISSIONS {} \;
+}
+
+chmodf() {
+    local WHERE=${1:-.}
+    local PERMISSIONS=${2:-0644}
+
+    change-permissions "$WHERE" f $PERMISSIONS
+}
+
+chmodd() {
+    local WHERE=${1:-.}
+    local PERMISSIONS=${2:-0755}
+
+    change-permissions "$WHERE" d $PERMISSIONS
+}
+
+
+alias ping='ping -c 5'
+
+alias ls='ls --color=auto --group-directories-first'
+alias llm='ls -l --block-size=MB'
+alias llg='ls -l --block-size=GB'
+
+alias df='df -h'
+alias du='du -h --max-depth=1 | sort -h'
+
+alias set-default-file-permissions='find . -type d -exec chmod 0755 {} \; && find . -type f -exec chmod 0644 {} \;'
+alias set-default-file-permissions-with-sudo='sudo find . -type d -exec chmod 0755 {} \; && sudo find . -type f -exec chmod 0644 {} \;'

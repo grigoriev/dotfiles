@@ -4,7 +4,7 @@ RED='\033[1;31m'
 YELLOW='\033[1;33m'
 NC='\033[0m'
 
-PACKAGE=`basename "$0"`
+PACKAGE=$(basename "$0")
 DOTFILES=$(cd "$(dirname "$0")"; pwd)
 
 TARGET_SYSTEM=

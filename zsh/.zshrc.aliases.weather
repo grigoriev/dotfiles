@@ -1,0 +1,4 @@
+alias weather-munich='curl wttr.in/munich\?1n'
+alias weather-home='curl wttr.in/48.13,11.67\?0'
+alias weather-work='curl wttr.in/48.035,11.588\?0'
+alias weather-minsk='curl wttr.in/minsk\?1n'

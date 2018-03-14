@@ -1,0 +1,1 @@
+alias svn-update="find . ! -readable -prune -o -type d -name .svn -exec svn up {}/.. \;"

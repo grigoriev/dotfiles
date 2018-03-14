@@ -1,0 +1,1 @@
+alias pretty-git-log='git log --pretty=format:"%C(auto,yellow)%h%C(auto,magenta)% G? %C(auto,blue)%>(19,trunc)%ad %C(auto,green)%<(19,trunc)%aN%C(auto,white)%s%C(auto,red)% gD% D" --graph --date=format:"%Y-%m-%d %H:%M:%S"'

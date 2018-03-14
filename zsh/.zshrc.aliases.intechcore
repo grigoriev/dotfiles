@@ -1,0 +1,40 @@
+alias itc-svn-edit="vim -O scp://grigoriev@helium.local//volume1/svn/authz scp://grigoriev@helium.local//volume1/svn/passwd"
+alias itc-svn-edit-remote="vim -O scp://grigoriev@git.intechcore.de//volume1/svn/authz scp://grigoriev@git.intechcore.de//volume1/svn/passwd"
+
+alias itc-sg-intechcore-de="ssh -XC sg.intechcore.de -p 2295"
+
+alias itc-ssh-alphabet-intechcore-intranet="ssh itc.grigoriev@192.168.1.110"
+
+alias itc-ssh-confluence-intechcore-intranet="ssh intechcore@192.168.1.150"
+alias itc-ssh-hrm-intechcore-intranet="ssh intechcore@192.168.1.151"
+alias itc-ssh-jenkins-jtp-intechcore-intranet="ssh intechcore@192.168.1.175"
+alias itc-ssh-jenkins-ts-intechcore-intranet="ssh intechcore@192.168.1.170"
+alias itc-ssh-jenkins-tsc-intechcore-intranet="ssh intechcore@192.168.1.171"
+alias itc-ssh-jenkins-tsm-intechcore-intranet="ssh intechcore@192.168.1.172"
+alias itc-ssh-jenkins-zs-intechcore-intranet="ssh intechcore@192.168.1.173"
+alias itc-ssh-jira-internal-intechcore-intranet="ssh intechcore@192.168.1.152"
+alias itc-ssh-jira-intechcore-intranet="ssh intechcore@192.168.1.153"
+alias itc-ssh-nexus-intechcore-intranet="ssh intechcore@192.168.1.154"
+alias itc-ssh-sonar-intechcore-intranet="ssh intechcore@192.168.1.174"
+
+alias itc-ssh-tsc-server-intechcore-intranet="ssh intechcore@192.168.1.195"
+alias itc-ssh-websta32-intechcore-intranet="ssh intechcore@192.168.1.192"
+alias itc-ssh-websta33-intechcore-intranet="ssh intechcore@192.168.1.193"
+
+alias itc-ssh-command-on-all-servers-as-root-parallel="parallel-ssh --user root --print --hosts ~/.intechcore-server-hosts -- "
+alias itc-ssh-command-on-all-servers-as-intechcore-parallel="parallel-ssh --user intechcore --print --hosts ~/.intechcore-server-hosts -- "
+
+itc-ssh-command-on-all-servers-as-user() {
+    for server in $(cat ~/.intechcore-server-hosts ) ; do
+        echo ${1}@${server} "${@:2}"
+        ssh ${1}@${server} "${@:2}"
+    done
+}
+
+itc-ssh-command-on-all-servers-as-root() {
+    itc-ssh-command-on-all-servers-as-user root ${@}
+}
+
+itc-ssh-command-on-all-servers-as-intechcore() {
+    itc-ssh-command-on-all-servers-as-user intechcore ${@}
+}
