@@ -38,7 +38,7 @@ rename() {
     local files=$1
     local rename_rule=$2
 
-    for $filename in $files ; do
+    for filename in $files ; do
         local new_filename=$(echo $filename | sed $rename_rule)
         if [ "$filename" -ne "$new_filename" ] {
             mv $filename $new_filename
