@@ -32,3 +32,16 @@ alias du='du -h --max-depth=1 | sort -h'
 
 alias set-default-file-permissions='find . -type d -exec chmod 0755 {} \; && find . -type f -exec chmod 0644 {} \;'
 alias set-default-file-permissions-with-sudo='sudo find . -type d -exec chmod 0755 {} \; && sudo find . -type f -exec chmod 0644 {} \;'
+
+# rename files "s/old-name/new-name/"
+rename() {
+    local files=$1
+    local rename_rule=$2
+
+    for $filename in $files ; do
+        local new_filename=$(echo $filename | sed $rename_rule)
+        if [ "$filename" -ne "$new_filename" ] {
+            mv $filename $new_filename
+        }
+    done
+}
