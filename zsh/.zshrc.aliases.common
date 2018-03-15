@@ -40,8 +40,8 @@ rename() {
 
     for filename in $files ; do
         local new_filename=$(echo $filename | sed $rename_rule)
-        if [ "$filename" -ne "$new_filename" ] {
+        if [ "$filename" -ne "$new_filename" ] then
             mv $filename $new_filename
-        }
+        fi
     done
 }
