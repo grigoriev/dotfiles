@@ -1,5 +1,5 @@
 alias itc-svn-edit="vim -O scp://grigoriev@helium.intechcore.intranet//volume1/svn/authz scp://grigoriev@helium.intechcore.intranet//volume1/svn/passwd"
-alias itc-svn-edit-remote="vim -O scp://grigoriev@git.intechcore.de//volume1/svn/authz scp://grigoriev@git.intechcore.de//volume1/svn/passwd"
+alias itc-svn-edit-remote="vim -O scp://grigoriev@helium.intechcore.de//volume1/svn/authz scp://grigoriev@helium.intechcore.de//volume1/svn/passwd"
 
 alias itc-ssh-lemming-intechcore-de="ssh -XC lemming.intechcore.de -p 2295"
 
