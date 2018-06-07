@@ -3,7 +3,7 @@ alias itc-svn-edit-remote="vim -O scp://grigoriev@git.intechcore.de//volume1/svn
 
 alias itc-ssh-lemming-intechcore-de="ssh -XC lemming.intechcore.de -p 2295"
 
-alias itc-ssh-alphabet-intechcore-intranet="ssh itc.grigoriev@alphabet.intechcore.intranet"
+alias itc-ssh-alphabet-intechcore-intranet="ssh grigoriev@alphabet.intechcore.intranet"
 
 alias itc-ssh-confluence-intechcore-intranet="ssh intechcore@confluence.intechcore.intranet"
 alias itc-ssh-hrm-intechcore-intranet="ssh intechcore@hrm.intechcore.intranet"
