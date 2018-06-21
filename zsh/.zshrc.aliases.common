@@ -21,8 +21,6 @@ chmodd() {
 }
 
 
-alias ping='ping -c 5'
-
 alias ls='ls --color=auto --group-directories-first'
 alias llm='ls -l --block-size=MB'
 alias llg='ls -l --block-size=GB'
@@ -46,3 +44,5 @@ function rename() {
         fi
     done
 }
+
+alias make-sh-scripts-executable="find . -type f -name '*.sh' -exec chmod +x {} \;"
