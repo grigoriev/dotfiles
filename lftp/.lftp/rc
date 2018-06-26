@@ -1,0 +1,3 @@
+set ssl:ca-file "~/.lftp/www_tuco-tuco_grigoriev_eu.crt"
+
+alias ll ls
