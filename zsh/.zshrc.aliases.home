@@ -1,10 +1,15 @@
 alias lftp-seedbox="lftp ls0835.seedbox.org.ua"
-alias lftp-tuco-tuco-local="lftp 192.168.88.233"
-alias lftp-tuco-tuco-remote="lftp tuco-tuco.grigoriev.eu"
 
-alias beaver-mount-music="sudo mount -t cifs //beaver.local/music ~/Music/beaver -o user=guest,guest"
+alias lftp-tuco-tuco-intranet="lftp 192.168.88.233"
+alias lftp-tuco-tuco-remote="lftp tuco-tuco.grigoriev.eu"
 
 alias home-ssh-squirrel-intranet="ssh root@192.168.88.1 -p 12594"
 alias home-ssh-squirrel-remote="ssh -t grigoriev@tuco-tuco.grigoriev.eu -p 22954 ssh root@192.168.88.1 -p 12594"
-alias home-ssh-tuco-tuco-remote="ssh grigoriev@tuco-tuco.grigoriev.eu -p 22954"
+
 alias home-ssh-tuco-tuco-intranet='ssh grigoriev@192.168.88.233'
+alias home-ssh-tuco-tuco-remote="ssh grigoriev@tuco-tuco.grigoriev.eu -p 22954"
+
+alias home-ssh-nutria-intranet="ssh nutria.intechcore.intranet"
+alias home-ssh-nutria-remote="ssh nutria.grigoriev.eu -p 2201"
+
+alias beaver-mount-music="sudo mount -t cifs //beaver.local/music ~/Music/beaver -o user=guest,guest"
